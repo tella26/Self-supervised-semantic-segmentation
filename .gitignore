@@ -113,7 +113,7 @@ ckpt/
 vis/
 log/
 pretrained/
-/data
+data/ADEChallengeData2016/
 
 # Spyder project settings
 .spyderproject
