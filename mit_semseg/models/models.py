@@ -193,7 +193,7 @@ class Resnet(nn.Module):
 
     def forward(self, x, return_feature_maps=False):
         conv_out = []
-
+        x = x.to(device)
         x = self.relu1(self.bn1(self.conv1(x)))
         x = self.relu2(self.bn2(self.conv2(x)))
         x = self.relu3(self.bn3(self.conv3(x)))
