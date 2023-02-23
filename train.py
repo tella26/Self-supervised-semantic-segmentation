@@ -182,12 +182,14 @@ def main(cfg, gpus):
     iterator_train = iter(loader_train)
 
   # load nets into device
+    '''
     if len(gpus) > 1:
         segmentation_module = UserScatteredDataParallel(
             segmentation_module,
             device_ids=gpus)
         # For sync bn
         patch_replication_callback(segmentation_module)
+    '''
     segmentation_module.to(device)
 
     # Set up optimizers
