@@ -32,21 +32,23 @@ class SegmentationModule(SegmentationModuleBase):
         if segSize is None:
             #image_list = [d['img_data'] for d in feed_dict]
             #label_list = [d['seg_label'] for d in feed_dict]
+            img_data = feed_dict[0]['img_data'].to(device)
+            seg_label = feed_dict[0]['seg_label'].to(device)
             if self.deep_sup_scale is not None: # use deep supervision technique
-                (pred, pred_deepsup) = self.decoder(self.encoder(feed_dict[0]['img_data'], return_feature_maps=True))
+                (pred, pred_deepsup) = self.decoder(self.encoder(img_data, return_feature_maps=True))
             else:
-                pred = self.decoder(self.encoder(feed_dict[0]['img_data'], return_feature_maps=True))
+                pred = self.decoder(self.encoder(img_data, return_feature_maps=True))
 
-            loss = self.crit(pred, feed_dict[0]['seg_label'])
+            loss = self.crit(pred, seg_label)
             if self.deep_sup_scale is not None:
-                loss_deepsup = self.crit(pred_deepsup, feed_dict[0]['seg_label'])
+                loss_deepsup = self.crit(pred_deepsup, seg_label)
                 loss = loss + loss_deepsup * self.deep_sup_scale
 
-            acc = self.pixel_acc(pred, feed_dict[0]['seg_label'])
+            acc = self.pixel_acc(pred, seg_label)
             return loss, acc
         # inference
         else:
-            pred = self.decoder(self.encoder(feed_dict[0]['img_data'], return_feature_maps=True), segSize=segSize)
+            pred = self.decoder(self.encoder(img_data, return_feature_maps=True), segSize=segSize)
             return pred
 
 
